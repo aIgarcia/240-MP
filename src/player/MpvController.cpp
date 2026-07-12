@@ -420,7 +420,7 @@ void MpvController::loadAndPlay(const QString &url, float startSeconds,
         m_process->setProcessEnvironment(env);
         args << QString("--input-conf=%1").arg(m_inputConfPath)
              << "--video-sync=audio"
-             << "--fullscreen" << "--no-native-fs";
+             << "--fullscreen";
         // Playback follows the UI's display (app-level "display_index"). Only
         // when a non-default display is configured, so the default command
         // line is untouched. Which form of the option works depends on the
