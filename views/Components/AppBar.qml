@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Effects
 
 Row {
     id: appBar
@@ -20,17 +19,11 @@ Row {
         anchors.verticalCenter: parent.verticalCenter
         height: root.sh * 0.05 //24
         Image {
-            visible: false
+            visible: true
             id: iconImg
             height: parent.height
             sourceSize.height: height
             source: appBar.iconSource
-        }
-        MultiEffect {
-            anchors.fill: iconImg
-            source: iconImg
-            colorization: 1.0
-            colorizationColor: root.accentColor
         }
     }
 

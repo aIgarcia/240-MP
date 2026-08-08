@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Effects
 import Components
 
 FocusScope {
@@ -47,22 +46,15 @@ FocusScope {
                 width: statusIndicatorImage.width
                 height: root.sh * 0.3791667 //182
                 Image {
-                    visible: false
+                    visible: true
                     id: statusIndicatorImage
-                    height: parent.height
-                    sourceSize.height: height
-                    source: "../assets/images/vhs.svg"
-                }
-                MultiEffect {
-                    id: statusIndicatorColor
-                    anchors.fill: statusIndicatorImage
-                    source: statusIndicatorImage
-                    colorization: 1.0
-                    colorizationColor: nfcReaderBackend.cardState === "matched" ? root.accentColor : root.primaryColor
                     opacity: !nfcReaderBackend.readerConnected ? 0.2
                         : nfcReaderBackend.cardState === "matched" ? 0.8
                         : nfcReaderBackend.cardState === "unmatched" ? 0.2
                         : 0.5
+                    height: parent.height
+                    sourceSize.height: height
+                    source: "../assets/images/vhs.svg"
                 }
             }
 

@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Effects
 
 // Three-day forecast: centred title, then one column per day.
 //
@@ -86,19 +85,13 @@ Item {
 
                     Image {
                         id: dayIconImage
-                        visible: false
+                        visible: true
                         height: parent.height
                         sourceSize.height: height
                         fillMode: Image.PreserveAspectFit
                         source: modelData.iconName
                             ? "../../assets/images/wx/" + modelData.iconName + ".svg"
                             : ""
-                    }
-                    MultiEffect {
-                        anchors.fill: dayIconImage
-                        source: dayIconImage
-                        colorization: 1.0
-                        colorizationColor: root.accentColor
                     }
                 }
 

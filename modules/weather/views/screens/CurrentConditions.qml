@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Effects
 
 // One WeatherStar screen: a left-aligned column of fixed text lines.
 //
@@ -34,7 +33,7 @@ Item {
     //
     // Tinted at runtime rather than shipped coloured — the app has a custom
     // colour scheme feature, and a baked-in colour would be wrong the moment
-    // anyone changes theme. Same hidden-Image + MultiEffect pattern as
+    // anyone changes theme. Same SVG-image pattern as
     // nfc_reader/views/Items.qml.
     Item {
         id: icon
@@ -48,19 +47,13 @@ Item {
 
         Image {
             id: iconImage
-            visible: false
+            visible: true
             height: parent.height
             sourceSize.height: height
             fillMode: Image.PreserveAspectFit
             source: screen.wx.iconName
                 ? "../../assets/images/wx/" + screen.wx.iconName + ".svg"
                 : ""
-        }
-        MultiEffect {
-            anchors.fill: iconImage
-            source: iconImage
-            colorization: 1.0
-            colorizationColor: root.accentColor
         }
     }
 
