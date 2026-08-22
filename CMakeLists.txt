@@ -160,7 +160,8 @@ if(APPLE)
         "${CMAKE_SOURCE_DIR}/assets"
         "${CMAKE_SOURCE_DIR}/scripts"
         DESTINATION "240mp.app/Contents/Resources"
-        COMPONENT Runtime)
+        COMPONENT Runtime
+        PATTERN "*.before-*" EXCLUDE)
 
     # Icon lives under packaging/macos (not assets/) so it ships alongside the
     # other macOS packaging inputs; installed at the same relative path so it
