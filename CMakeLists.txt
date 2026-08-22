@@ -141,6 +141,13 @@ endif()
 if(APPLE)
     install(TARGETS 240mp BUNDLE DESTINATION . COMPONENT Runtime)
 
+    # SDL2 is an external dylib on macOS and is not copied by the normal
+    # bundle install rule. Ship the exact SDL2 library selected by CMake
+    # so the installed app satisfies its @rpath/libSDL2 dependency.
+    install(FILES "$<TARGET_FILE:SDL2::SDL2>"
+        DESTINATION "240mp.app/Contents/Frameworks"
+        COMPONENT Runtime)
+
     # Use a hardcoded relative path — $<TARGET_BUNDLE_CONTENT_DIR> resolves to
     # the build tree, not the install prefix, inside install() rules.
     install(FILES "${CMAKE_SOURCE_DIR}/Main.qml"
