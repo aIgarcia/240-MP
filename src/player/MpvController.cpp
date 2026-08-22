@@ -406,8 +406,6 @@ void MpvController::loadAndPlay(const QString &url, float startSeconds,
         // (e.g. the Steam Deck's KDE session launched from the file manager),
         // removing it would leave mpv with no output at all and it exits
         // instantly. In that case keep Wayland so mpv can open a window.
-        // --no-native-fs avoids macOS Space-transition delays that can
-        // prevent early OSD renders from appearing.
         QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
         env.insert("APP_ROOT", m_appRoot);
         if (!qEnvironmentVariable("DISPLAY").trimmed().isEmpty())
