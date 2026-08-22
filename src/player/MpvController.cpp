@@ -219,8 +219,8 @@ void MpvController::loadAndPlay(const QString &url, float startSeconds,
         // subs disabled or provided via transcode
         args << QStringLiteral("--sid=no");
     else if (subTrack == -1)
-        // forced subs only
-        args << QStringLiteral("--subs-with-matching-audio=forced") << QStringLiteral("--subs-fallback-forced=always");
+        // mpv 0.35 does not support forced-subtitle-only selection
+        args << QStringLiteral("--sid=no");
     else if (subTrack == 0) {
         // Always display subs, even if the audio and subtitle languages match
         args << QStringLiteral("--subs-with-matching-audio=yes") << QStringLiteral("--subs-fallback=yes");
@@ -451,12 +451,11 @@ void MpvController::loadAndPlay(const QString &url, float startSeconds,
         }
         appendVideoArgs(args);
 #ifdef Q_OS_MACOS
-        // mpv runs as a separate process and can't see the app-bundle font via
-        // FontLoader. This will load the bundled VCR OSD Mono directly into the OSD libass
-        // instance (used by the OSC scripts) so users don't need a system install.
-        // macOS libass uses the coretext provider, so the Linux FONTCONFIG_FILE
-        // approach doesn't apply here; --osd-fonts-dir is provider-independent.
-        args << QString("--osd-fonts-dir=%1").arg(m_appRoot + "/assets/fonts");
+        // mpv 0.35 uses CoreText and cannot load fonts directly from the
+        // application bundle. main.cpp installs the bundled font in the
+        // current user's Library/Fonts directory before mpv is launched.
+        args << QStringLiteral("--osd-font=VCR OSD Mono")
+             << QStringLiteral("--sub-font=VCR OSD Mono");
 #endif
         QString safeCmd = args.join(" ");
         // Redact all token forms in debug output

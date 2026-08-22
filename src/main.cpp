@@ -3,6 +3,8 @@
 #include <QQmlContext>
 #include <QUrl>
 #include <QDir>
+#include <QFile>
+#include <QFileInfo>
 #include <QStandardPaths>
 #include <QCursor>
 #include <QDebug>
@@ -49,6 +51,55 @@ static QString resolveAppRoot() {
 
     return QDir(appDir + "/..").canonicalPath();
 }
+
+#ifdef Q_OS_MAC
+static void installBundledMpvFont(const QString &appRoot) {
+    const QString source =
+        appRoot + "/assets/fonts/VCR_OSD_MONO_1.001.ttf";
+
+    const QString fontsDir =
+        QDir::homePath() + "/Library/Fonts";
+
+    const QString destination =
+        fontsDir + "/VCR_OSD_MONO_1.001.ttf";
+
+    if (!QFileInfo::exists(source)) {
+        qWarning("[main] Bundled mpv font not found: %s",
+                 qPrintable(source));
+        return;
+    }
+
+    QDir().mkpath(fontsDir);
+
+    bool copyRequired = !QFileInfo::exists(destination);
+
+    if (!copyRequired) {
+        QFileInfo sourceInfo(source);
+        QFileInfo destinationInfo(destination);
+        copyRequired = sourceInfo.size() != destinationInfo.size();
+    }
+
+    if (copyRequired) {
+        QFile::remove(destination);
+
+        if (QFile::copy(source, destination)) {
+            QFile::setPermissions(
+                destination,
+                QFileDevice::ReadOwner |
+                QFileDevice::WriteOwner |
+                QFileDevice::ReadGroup |
+                QFileDevice::ReadOther
+            );
+
+            qDebug("[main] Installed mpv font: %s",
+                   qPrintable(destination));
+        } else {
+            qWarning("[main] Could not install mpv font: %s",
+                     qPrintable(destination));
+        }
+    }
+}
+#endif
 
 static QString resolveDataRoot() {
     QString envRoot = qEnvironmentVariable("DATA_ROOT");
@@ -108,6 +159,10 @@ int main(int argc, char *argv[]) {
 
     const QString appRoot  = resolveAppRoot();
     const QString dataRoot = resolveDataRoot();
+
+#ifdef Q_OS_MAC
+    installBundledMpvFont(appRoot);
+#endif
     qDebug("[main] appRoot  = %s", qPrintable(appRoot));
     qDebug("[main] dataRoot = %s", qPrintable(dataRoot));
 
