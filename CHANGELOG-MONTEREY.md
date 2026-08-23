@@ -1,86 +1,200 @@
 # 240-MP Monterey Intel — Changelog
 
-This file documents changes maintained in this fork for the Intel
-macOS Monterey build. Upstream 240-MP development remains the work of
-Anthony Caccese and its contributors.
+This file documents the Intel macOS Monterey work maintained in this fork.
 
-## v2026.08.17-monterey-intel.2 — 2026-08-22
+Upstream 240-MP remains the work of Anthony Caccese and its contributors.
 
-Validated Intel x86_64 build for macOS Monterey 12, based on upstream
-240-MP v2026.08.17 (`b434603`).
+## v2026.08.17-monterey-intel.3 — 2026-08-23
+
+Intel x86_64 release for macOS Monterey 12 based on upstream 240-MP
+v2026.08.17 (`b434603`).
+
+This release keeps the playback work from the previous Monterey Intel
+release, improves discovery of external mpv installations, and adds a
+repeatable standalone release-packaging workflow.
 
 ### Upstream base
 
-Includes all upstream changes through v2026.08.17, including:
+- 240-MP v2026.08.17
+- upstream commit `b434603`
 
-- configurable macOS launch display;
-- Scripts module;
-- Plex PIN-protected Home profile support;
-- repeated skip while holding a key;
-- settings navigation improvements;
-- Plex server-token recovery;
-- IP address display;
-- Ambient Mode shuffle and auto-launch;
-- expanded NFC Reader support;
-- Weather module.
+This includes the upstream configurable macOS launch display and all
+other upstream changes included in that release.
 
-### Monterey Intel changes
+### Changes since Monterey Intel .2
 
-- Builds as native Intel x86_64 with macOS Monterey 12 as deployment
-  target.
-- Uses Qt 6.5.3 for the Monterey build.
-- Removes mpv `--no-native-fs` while retaining fullscreen playback,
-  fixing the thin white border observed on macOS fullscreen playback.
-- Preserves upstream configurable-display handling introduced in
-  v2026.08.17.
-- Adds an expanded playback OSD with:
-  - useful media titles while filtering technical Plex URLs;
-  - video codec;
-  - simplified resolution;
-  - aspect ratio;
-  - normalized frame rate;
-  - audio codec and Mono/Stereo/Surround classification;
-  - current and total audio-track count;
-  - useful audio-language metadata;
-  - subtitle format and current/total subtitle-track count.
-- Adds more robust mpv discovery for personal macOS installations,
-  including PATH, common Homebrew locations, and mpv.app.
+#### Improved mpv discovery
 
-### Runtime requirements
+The Monterey build keeps mpv as an external runtime dependency.
 
-The application bundle contains its required Qt runtime and QML
-components.
+240-MP now searches for mpv in this order:
 
-mpv remains an external playback dependency.
+1. An executable named `mpv` beside the 240-MP executable
+2. The application environment `PATH`
+3. `/usr/local/bin/mpv`
+4. `/opt/homebrew/bin/mpv`
+5. `/Applications/mpv.app/Contents/MacOS/mpv`
+6. `~/Applications/mpv.app/Contents/MacOS/mpv`
 
-yt-dlp remains an external dependency used for YouTube functionality.
-Plex, Jellyfin, Emby, Local Files and Ambient Mode do not require
-yt-dlp for their normal playback paths.
+This is especially useful for GUI launches on macOS because graphical
+applications can inherit a more restricted `PATH` than interactive
+shells.
 
-### Validated environment
+The fallback to `/Applications/mpv.app/Contents/MacOS/mpv` was tested
+with `/usr/local/bin/mpv` temporarily disabled and playback continued
+successfully.
+
+#### Release packaging
+
+The branch now includes:
+
+`package-monterey-release.sh`
+
+The script performs a clean standalone release build and:
+
+- builds in Release mode;
+- targets Intel x86_64;
+- uses macOS 12.0 as the deployment target;
+- uses Qt 6.5.3;
+- uses `CI=1` so application resources are copied into the bundle;
+- runs `cmake --install`;
+- runs `macdeployqt`;
+- installs a deterministic `qt.conf`;
+- bundles the required Qt/QML runtime;
+- bundles OpenSSL crypto;
+- bundles SDL2;
+- applies an ad-hoc macOS code signature;
+- verifies the completed signature;
+- checks required runtime files;
+- checks for non-system absolute library dependencies;
+- checks for development-machine paths in the executable;
+- reports the Mach-O target and SDK;
+- reports the final executable SHA-256;
+- reports the embedded application version.
+
+The script does not bundle mpv or yt-dlp.
+
+Those remain external runtime dependencies on Monterey.
+
+### Build environment used for the validated release
 
 - macOS Monterey 12
 - Intel x86_64
-- Qt 6.5.3
 - AppleClang 14
-- external mpv
-- external yt-dlp
+- Qt 6.5.3
+- OpenSSL 3
+- SDL2 through `sdl2-compat`
+- mpv 0.39.0
 
-### Packaging
+The validated application binary targets:
 
-The validated standalone application is produced using a packaging
-build (`CI=1`), followed by `cmake --install` and `macdeployqt`.
+- architecture: x86_64
+- minimum macOS: 12.0
+- SDK: 13.1
 
-Development builds intentionally use a symlink from
-`Contents/Resources` to the source tree and must not be used directly
-as distributable application bundles.
+### Validated release application
 
-## Previous Monterey Intel work
+The release application generated by `package-monterey-release.sh` was
+tested directly before being preserved as the Monterey Intel .3 golden
+build.
 
-### v2026.07.12-monterey-intel.1
+Validated executable SHA-256:
 
-Initial Intel Monterey build.
+`6f02b201a5e79e36807d094682e2dfa3507f8f9393b1b295a5c7198f90e2ef31`
 
-- Native Intel x86_64 build.
-- Initial fullscreen border fix.
-- Initial expanded mpv playback OSD.
+Embedded application version:
+
+`v2026.08.17-monterey-intel.3`
+
+Approximate application bundle size:
+
+`137 MB`
+
+This checksum identifies the validated release build. Rebuilding with
+different compiler, SDK or dependency revisions is not guaranteed to
+produce a byte-for-byte identical Mach-O binary.
+
+### Runtime validation
+
+The following paths were exercised successfully on the final .3 build:
+
+- application startup and navigation;
+- Plex playback;
+- Local Files playback;
+- Ambient Mode playback;
+- expanded playback OSD;
+- fullscreen playback;
+- external mpv discovery through the normal `/usr/local/bin/mpv` path;
+- external mpv discovery through `/Applications/mpv.app/Contents/MacOS/mpv`
+  with `/usr/local/bin/mpv` disabled.
+
+The normal `/usr/local/bin/mpv` link was restored after the fallback
+test.
+
+### Runtime model
+
+The standalone application bundle contains the Qt/QML runtime, OpenSSL
+crypto library and SDL2 required by 240-MP itself.
+
+mpv remains external.
+
+yt-dlp remains external and is used by YouTube functionality.
+
+YouTube and NFC Reader were not part of the final Monterey .3 validation
+pass.
+
+## v2026.08.17-monterey-intel.2 — 2026-08-22
+
+Tag commit:
+
+`a5b495f`
+
+Validated Intel x86_64 build for macOS Monterey 12 based on upstream
+240-MP v2026.08.17 (`b434603`).
+
+### Monterey Intel changes
+
+- native Intel x86_64 build with macOS 12.0 deployment target;
+- Qt 6.5.3;
+- native macOS fullscreen fix;
+- expanded playback OSD.
+
+The fullscreen change removes the previous non-native fullscreen
+behavior that could leave a thin white border around playback on macOS.
+
+The expanded OSD adds playback metadata including:
+
+- useful display titles while filtering technical Plex URLs;
+- video codec;
+- simplified resolution;
+- aspect ratio;
+- normalized frame rate;
+- audio codec;
+- Mono/Stereo/Surround classification;
+- current and total audio-track count;
+- useful audio-language metadata;
+- subtitle format;
+- current and total subtitle-track count.
+
+The improved macOS mpv discovery described in Monterey Intel .3 was not
+part of this release.
+
+### Historical validated binary
+
+A standalone application produced from the .2 source state was
+preserved during the .3 release review.
+
+Executable SHA-256:
+
+`ffb99601222337890fd87c88fb68a9553113c78f9ab479993f5b1c78b533749b`
+
+This historical binary does not contain the additional mpv search paths
+introduced after .2.
+
+## v2026.07.12-monterey-intel.1
+
+Initial Intel Monterey work.
+
+- native Intel x86_64 build;
+- initial macOS fullscreen work;
+- initial expanded mpv playback OSD.

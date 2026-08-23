@@ -1,171 +1,266 @@
 <img src="https://github.com/user-attachments/assets/73c3e46f-a74a-4d96-9c4f-ae30f28378be" />
 
-# 240-MP
+# 240-MP — Intel macOS Builds
 
-240-MP is a retro VCR style frontend to play content on [Raspberry Pi](https://github.com/anthonycaccese/240-MP/wiki/Hardware-Testing) (preferably hooked up to a CRT TV), Steam OS (and other Linux x86_64 distros) or MacOS (ARM).
+Intel macOS builds of [240-MP](https://github.com/anthonycaccese/240-MP),
+the retro VCR-style media frontend created by Anthony Caccese.
 
-Playback experiences are handled via modules to enable new integrations without requiring major changes to the overall frontend. Try to think of each module as a different input on a VHS deck. There are 8 included modules currently: [Local Files](https://github.com/anthonycaccese/240-MP/wiki/Module:-Local-Files), [Plex](https://github.com/anthonycaccese/240-MP/wiki/Module:-Plex), [Jellyfin](https://github.com/anthonycaccese/240-MP/wiki/Module:-Jellyfin), Emby, [YouTube](https://github.com/anthonycaccese/240-MP/wiki/Module:-YouTube), [NFC Reader](https://github.com/anthonycaccese/240-MP/wiki/Module:-NFC-Reader), [Weather](https://github.com/anthonycaccese/240-MP/wiki/Module:-Weather) and a module similar to art/wallpaper modes on modern tvs called [Ambient:Mode](https://github.com/anthonycaccese/240-MP/wiki/Module:-Ambient-Mode).
+This fork exists specifically to keep 240-MP usable on Intel Macs outside
+the macOS targets maintained by the upstream project.
 
-It's built to work in conjuction with [MPV](https://github.com/anthonycaccese/240-MP/wiki/MPV) which will be installed (or updated) as a dependency during the [install](#Install) steps.  Some modules (like YouTube and NFC Reader) have additional dependencies which are covered on their associated wiki pages under the "To Enable" sections.
+For general information about 240-MP, its modules, configuration,
+hardware support and original documentation, use the
+[upstream project](https://github.com/anthonycaccese/240-MP).
 
-## Video Overview
+## Branches
 
-Watch on YouTube: https://youtu.be/r-gylGDoELY
-
-## Photos
-
-| Module Selection | Item Detail |
+| Branch | Purpose |
 | --- | --- |
-| <img src="https://github.com/user-attachments/assets/9472d55a-4617-4a7f-80c4-32aa28494048" /> | <img src="https://github.com/user-attachments/assets/4f7d8230-860a-4ace-9370-9f59f43289c0" /> |
+| `main` | Mirror of upstream 240-MP |
+| `monterey-intel` | Intel x86_64 build for macOS Monterey |
+| `catalina-intel` | Intel x86_64 build for macOS Catalina |
 
-| Resume Option | Playback | Settings |
-| --- | --- | --- |
-| <img src="https://github.com/user-attachments/assets/490e9ebd-fab2-4fd1-9959-35ebb619eff0" /> | <img src="https://github.com/user-attachments/assets/a3c768c7-6ede-4cdf-9d03-90aee7b8cdfb" /> | <img src="https://github.com/user-attachments/assets/0fd48977-8776-4334-b34e-d12256f23b97" /> |
+`main` is intentionally kept aligned with upstream.
 
-## Modules
+Intel-specific compatibility, packaging and release work lives only in
+the Intel branches.
 
-### Ambient:Mode ([Wiki](https://github.com/anthonycaccese/240-MP/wiki/Module:-Ambient-Mode))
-- Supported video file types: `"mp4", "mkv", "avi", "mov", "m4v", "webm", "wmv", "flv", "f4v", "mpg", "mpeg", "vob"`
-- Playlist support for audio tracks using `m3u` and `m3u8` files
-- Mix video with a different audio track
-- Loops forever until you stop it
+## macOS Monterey — Intel
 
-### Emby Module ([Wiki](https://github.com/anthonycaccese/240-MP/wiki/Module:-Emby))
-- Supported library types: `movies, tvshows, homevideos, boxsets`
-- Username / password authentication, or Emby Connect (emby.media cloud account, with server picker)
-- Select specific libraries to display
-- Continue Watching, Next Up and Resume Playback
-- Autoplay next episode in a season (optional, off by default)
-- Intro/Credit skip using the server's chapter markers (when detected)
-- Collections support
-- Select preferred audio/subtitle track before playback and switch tracks during playback
-- Full library browsing by letter
-- Show/Season browsing
-- Video quality selection: Direct Playback (Default) or Transcode options
+Branch:
 
-### Jellyfin ([Wiki](https://github.com/anthonycaccese/240-MP/wiki/Module:-Jellyfin))
-- Supported library types: `movies, tvshows, homevideos, boxsets`
-- "Quick Connect" authentication
-- Select specific libraries to display
-- Continue Watching, Next Up and Resume Playback
-- Autoplay next episode in a season (optional, off by default)
-- Collections support
-- Select preferred audio/subtitle track before playback and switch tracks during playback
-- Full library browsing by letter
-- Show/Season browsing
-- Video quality selection: Direct Playback (Default) or Transcode options
+`monterey-intel`
 
-### Local Files ([Wiki](https://github.com/anthonycaccese/240-MP/wiki/Module:-Local-Files))
-- Supported file types: `"mp4", "mkv", "avi", "mov", "m4v", "webm", "wmv", "flv", "f4v", "mpg", "mpeg", "vob"`
-- Playlist support using `m3u` and `m3u8` files
-- Folder browsing
-- Loop playback
-- Shuffle playback
-- Playback history
-- Switch audio/subtitle tracks during playback
+Current release:
 
-### NFC Reader ([Wiki](https://github.com/anthonycaccese/240-MP/wiki/Module:-NFC-Reader))
-- Start video playback via NFC cards
-- Reader support:
-  - `PN532 USB` — recommended. Needs no drivers or daemon on any platform, so it also works on immutable distros like SteamOS
-  - `ACS ACR122U` and other PC/SC contactless readers — needs `pcscd` (see `scripts/setup-nfc-reader.sh`)
-- Readers are detected automatically; no configuration needed
-- Maps cards to videos via per-card text files in a `nfc_tags` data directory
-- Tapping an unknown card auto-creates a stub tag file for it
+`v2026.08.17-monterey-intel.3`
 
-### Plex ([Wiki](https://github.com/anthonycaccese/240-MP/wiki/Module:-Plex))
-- Supported library types: `Movies, TV Shows, Other Videos`
-- Server switching
-- User profile switching and auto sign in
-- Select specific libraries to display
-- Continue Watching and Resume
-- Autoplay next episode in a season (optional, off by default)
-- Hub, Playlist, Collection and Category support
-- Movie editions
-- Select preferred audio/subtitle track before playback and switch tracks during playback
-- Full library browsing by letter
-- Show/Season browsing
-- Video quality selection: Direct Playback (Default) or Transcode options
+Base:
 
-### Scripts ([Wiki](https://github.com/anthonycaccese/240-MP/wiki/Module:-Scripts))
-- Run your own `.sh` scripts from a folder, so 240-MP can launch anything else on the machine (FieldStation42, RetroArch, `yt-dlp -U`, updates)
-- Two run modes per script, set in its `.txt` file:
-    - `console` — 240-MP stays on screen and shows the script's output
-    - `takeover` — the script gets the whole display, and 240-MP returns when it exits
-- A `.txt` file beside each script sets its display name and options; one is created for you automatically the first time a script is seen
-- Mark a script as a favorite to put it on the main menu alongside the other modules (press play/pause on it in the list)
-- Optionally auto-run one script when 240-MP starts
-- Off by default; enable it in Settings and point it at your scripts folder
+- 240-MP `v2026.08.17`
+- upstream commit `b434603`
+- macOS Monterey 12
+- Intel x86_64
+- Qt 6.5.3
 
-### Weather ([Wiki](https://github.com/anthonycaccese/240-MP/wiki/Module:-Weather))
-- Inspired by [WeatherStar 3000+](https://github.com/netbymatt/ws3kp) by netbymatt
-- Integrates with Open-Meteo to provide weather forecasts for worldwide locations
-- Integrates with NWS to provide current conditions for US locations
-- For your main location it displays Current Conditions and Extended (3-day forecast)
-- Can display forecast data for 6 additional locations
-- Supports background music, US/Metric Units and 12-hour/24-hour time display
+The Monterey build retains the normal external mpv / yt-dlp runtime
+model.
 
-### YouTube ([Wiki](https://github.com/anthonycaccese/240-MP/wiki/Module:-YouTube))
-- List content from YouTube RSS feeds and playback via mpv + yt-dl (no auth required)
-- View Subscriptions: Browse the latest videos from your configured channels as a reverse chronological list
-- Browse videos by Channel
-- Save to a local Watch Later list
-- View your local Watch History
-- Resume Playback
-- Set Playback Resolution: 480p (default and good for the RaspberryPi), 720p and 1080p
-- Choose to Display Shorts or not (default is On)
+The branch includes:
 
-## Install
-- [On a Raspberry Pi](INSTALL.md#on-a-raspberry-pi)
-- [On macOS (ARM)](INSTALL.md#on-macos-arm)
-- [On SteamOS / Linux x86_64](INSTALL.md#on-steamos--linux-x86_64)
+- native Intel x86_64 support;
+- macOS 12.0 deployment target;
+- native macOS fullscreen fix;
+- expanded playback OSD;
+- improved mpv discovery for GUI launches;
+- standalone Qt/QML packaging;
+- bundled SDL2 runtime;
+- bundled OpenSSL crypto runtime;
+- repeatable release packaging.
 
-## Hardware Testing
-- [Raspberry Pi 3B](https://github.com/anthonycaccese/240-MP/wiki/Hardware-Testing#raspberry-pi-3b)
-- [Raspberry Pi 3B+](https://github.com/anthonycaccese/240-MP/wiki/Hardware-Testing#raspberry-pi-3b-1)
-- [Raspberry Pi 4B](https://github.com/anthonycaccese/240-MP/wiki/Hardware-Testing#raspberry-pi-4b)
-- [Raspberry Pi 5](https://github.com/anthonycaccese/240-MP/wiki/Hardware-Testing#raspberry-pi-5)
-- [Steam Deck](https://github.com/anthonycaccese/240-MP/wiki/Hardware-Testing#steam-deck)
+See `CHANGELOG-MONTEREY.md` for the detailed release history and
+validation record.
 
-## FAQs
+### Monterey runtime dependencies
 
-- Why didn't you use Kodi/LibreELEC/OSMC?
-    - I've used all of those distros and they are all excellent but I also like making things and wanted something simpler without as many options.  Something that felt like a VCR from my youth.
-- Should I use 240-MP instead of Kodi/LibreELEC/OSMC?
-    - I would recommend thinking about it like this...
-    - All of those distros are amazing, feature rich, work across a ton of devices and have awesome supportive teams behind them.
-    - I on the other hand am just one person making nostalgic things for my own niche use cases.
-    - If those use cases match with what you're looking for, then 240-MP is a bunch of fun and I'd be happy for you to try it.
-    - Otherwise, the well known distros are spectacular and you should likely open those doors instead.
-- Will this work on other Raspberry Pi models? (like the 5, 2 zero, etc...)
-    - I've tested on the 4b, 3b+ and 3b. Other users have confimred the 5 works well too and all the details on what we've confimred can be found here: https://github.com/anthonycaccese/240-MP/wiki/Hardware-Testing
-    - If its not on that list then the short answer is "we don't know but please feel free try and let us know if it works"
-- Where does the name "240-MP" come from?
-    - 240 has a double meaning referring to the longest [VHS tape length](https://en.wikipedia.org/wiki/VHS#Tape_lengths) and love for [CRT TVs](https://consolemods.org/wiki/CRT:What_is_240p%3F) as a display type.
-    - MP also has a double meaning of "Media Player" and a play on the "SP/LP/EP/SLP" terminology that was used to refer to the recording quality for VHS recordings.
-- Does the 240 in the name mean that it outputs at 240p resolution?
-    - The UI scales based on the OS config and output cables you are using.
-    - For example: the output resolution for the menu and video playback when using it on a CRT with the configs I use is 480i/576i
-- Does 240-MP support RGB out instead of composite?
-    - 240-MP is just an app that runs on top of an already configured Operating System. If you are able to configure your OS on the Raspberry Pi to output over RGB then 240-MP will simply scale and display to that output when it boots up as well.
-    - If you have a combination of RGB out + OS configuration that works well then please add a comment here with your set up details: https://github.com/anthonycaccese/240-MP/discussions/44
-- Does 240-MP work over HDMI on a modern television too?
-    - Yes! The UI was built to scale on modern televisions over HDMI as well.
-    - Please make sure you use the config.txt I provide for HDMI and it will output at the proper resolution for a modern tv.
-- Does 240-MP support bluetooth keyboards/remotes/controllers?
-    - 240-MP is just an app that runs on top of an already configured Operating System. If your OS has a way to configure and set up bluetooh controllers then 240-MP will simply see them as controllers when it boots up.
+The release application contains the Qt/QML, SDL2 and OpenSSL components
+required by 240-MP itself.
 
-## Credits & Acknowledgments
+mpv is external.
 
-- The `VCR OSD Mono` font was created by Riciery Santos Leal (a.k.a. mrmanet) https://www.dafont.com/vcr-osd-mono.font
-- The `Unifont` font (used as a fallback for characters that VCR OSD Mono does not cover) is GNU Unifont by Roman Czyborra, Paul Hardy, et al., licensed under the SIL Open Font License v1.1. https://unifoundry.com/unifont/ — license text: [assets/fonts/LICENSE-unifont.txt](assets/fonts/LICENSE-unifont.txt)
-- Because this is a hobby project (and a fairly niche use case), I am using [Claude Code](https://www.anthropic.com/product/claude-code) to build a large part of the backend C++ code and structure the modules.  If you have concerns with that, I am glad to talk through it.  Also, please feel free to fork this repo, update any aspects and tailor things to your own use case; that's why the source is fully open and available.
-- Thank you to Plex, Jellyfin, Emby and Open-Meteo for providing open and free apis to enable building modules for each.
-- Thank you to [the MPV team](https://mpv.io/) for a simple, extensible and cross platform media player
-- And thank you to the [Raspberry Pi Foundation](https://www.raspberrypi.org/) for helping me fill a drawer with SBCs to tinker with and inspire fun ideas like this project ❤️
+The validated Monterey .3 release used:
+
+`mpv 0.39.0`
+
+240-MP searches for mpv in the application directory, `PATH`, common
+Homebrew locations and standard `mpv.app` locations.
+
+yt-dlp is also external and is required for YouTube functionality.
+
+### Monterey validation
+
+The final Monterey .3 application was tested on Intel macOS Monterey.
+
+The validation included:
+
+- application startup and navigation;
+- Plex playback;
+- Local Files playback;
+- Ambient Mode playback;
+- expanded playback OSD;
+- fullscreen playback;
+- normal external mpv discovery;
+- fallback discovery of `/Applications/mpv.app/Contents/MacOS/mpv`.
+
+The fallback test was performed with `/usr/local/bin/mpv` temporarily
+disabled. Playback continued successfully using the standalone
+`/Applications/mpv.app` installation.
+
+Validated Monterey .3 executable SHA-256:
+
+`6f02b201a5e79e36807d094682e2dfa3507f8f9393b1b295a5c7198f90e2ef31`
+
+The checksum identifies the tested release binary. Builds made with
+different compiler, SDK or dependency revisions are not expected to be
+byte-for-byte reproducible.
+
+## Rebuilding Monterey from a clean clone
+
+The Monterey branch includes:
+
+`package-monterey-release.sh`
+
+The build assumes that the required development tools are already
+installed.
+
+The validated toolchain uses:
+
+- Xcode Command Line Tools / AppleClang 14;
+- CMake;
+- Homebrew;
+- Qt 6.5.3;
+- Homebrew `openssl@3`;
+- Homebrew `sdl2-compat`.
+
+By default the packaging script expects Qt at:
+
+`~/Qt/6.5.3/macos`
+
+An alternate Qt installation can be selected with `QT_ROOT`.
+
+Starting from a clean clone:
+
+    git clone https://github.com/aIgarcia/240-MP.git
+    cd 240-MP
+    git checkout monterey-intel
+    ./package-monterey-release.sh v2026.08.17-monterey-intel.3
+
+The completed application is written to:
+
+`dist-monterey-release/240mp.app`
+
+The script creates a fresh build directory each time and performs the
+complete configure, build, install, Qt deployment, signing and validation
+sequence.
+
+For normal playback, install a compatible external mpv build separately.
+
+## macOS Catalina — Intel
+
+Branch:
+
+`catalina-intel`
+
+Current release:
+
+`v2026.08.17-catalina-intel.1`
+
+Base:
+
+- 240-MP `v2026.08.17`
+- upstream commit `b434603`
+- macOS Catalina 10.15
+- Intel x86_64
+- Qt 6.4.2
+- mpv 0.35.0
+
+The Catalina port contains additional compatibility work required by the
+older operating system, Qt version and mpv runtime.
+
+Unlike Monterey, the Catalina release embeds its validated mpv 0.35.0
+runtime directly inside the 240-MP application bundle.
+
+The Catalina release has been tested on macOS Catalina 10.15.7 on Intel
+hardware.
+
+Detailed Catalina documentation is maintained on the `catalina-intel`
+branch.
+
+Catalina changelog:
+
+https://github.com/aIgarcia/240-MP/blob/catalina-intel/CHANGELOG-CATALINA.md
+
+### Rebuilding Catalina from a clean clone
+
+The Catalina branch contains:
+
+`package-catalina-release.sh`
+
+Starting from a clean clone on a build machine with the documented
+Catalina toolchain available:
+
+    git clone https://github.com/aIgarcia/240-MP.git
+    cd 240-MP
+    git checkout catalina-intel
+    ./package-catalina-release.sh v2026.08.17-catalina-intel.1
+
+The packaging workflow builds the application, deploys Qt, downloads the
+pinned mpv 0.35.0 archive, verifies its SHA-256, embeds the mpv runtime,
+installs the required third-party notices and validates the completed
+bundle.
+
+The validated Catalina release is built on macOS Monterey while targeting
+Intel macOS Catalina 10.15.
+
+## Release philosophy
+
+The Intel branches are intended to remain reconstructable from source.
+
+The expected workflow is:
+
+1. Install the documented build tools and dependencies.
+2. Clone this fork.
+3. Check out the desired Intel branch.
+4. Run that branch's release-packaging script.
+5. Obtain a standalone application bundle suitable for testing or
+   distribution.
+
+Release checksums identify the exact binaries that were manually tested.
+
+They are not used as a requirement that independent builds made with
+different compiler or dependency revisions must be byte-for-byte
+identical.
+
+## Scope of this fork
+
+This repository does not attempt to maintain alternative Raspberry Pi,
+SteamOS/Linux or Apple Silicon versions of 240-MP.
+
+Those platforms, the complete module documentation, hardware information
+and general 240-MP documentation remain with the upstream project.
+
+Changes maintained here are intentionally limited to useful Intel macOS
+builds, compatibility work required by those systems, release packaging,
+and the small set of playback improvements shared by the Intel builds.
+
+## Upstream
+
+240-MP is created and maintained by Anthony Caccese.
+
+Upstream repository:
+
+https://github.com/anthonycaccese/240-MP
+
+Upstream documentation and wiki:
+
+https://github.com/anthonycaccese/240-MP/wiki
+
+This fork is downstream of the original project. Upstream is used as the
+source for base releases and future synchronization; Intel-specific
+release work is maintained in this fork.
+
+## Development note
+
+AI-assisted development and review were used during the Intel macOS
+porting, packaging and documentation work, together with manual build,
+runtime and hardware testing.
 
 ## License
 
-This project is licensed under the GNU General Public License v3.0. See [LICENSE](LICENSE) for the full text.
+240-MP is licensed under the GNU General Public License v3.0.
 
-You are free to use, study, and modify this code. If you distribute a modified version, you must also distribute it under GPL-3.0 and make the source available.
+See `LICENSE` for the project license.
+
+Bundled third-party components retain their respective licenses.
+Catalina-specific mpv provenance and notices are maintained on the
+`catalina-intel` branch.
