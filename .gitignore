@@ -16,3 +16,5 @@ Thumbs.db
 /.appimage-tools
 /.mpv-build
 /*.AppImage
+/build-monterey-release/
+/dist-monterey-release/
