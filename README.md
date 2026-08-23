@@ -129,7 +129,7 @@ The Catalina branch includes `package-catalina-release.sh`.
 
 A release can be produced with:
 
-    ./package-catalina-release.sh v2026.08.17-catalina-intel.1
+    ./package-catalina-release.sh v2026.08.17-intel-macos
 
 The script performs the release build, Qt deployment, mpv download and verification, runtime embedding, third-party notice installation and final bundle validation.
 

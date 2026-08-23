@@ -6,7 +6,11 @@ The Catalina port is based on upstream 240-MP v2026.08.17 and targets Intel Macs
 
 ## Release
 
-### v2026.08.17-catalina-intel.1
+### v2026.08.17 — Catalina Intel
+
+Public Intel macOS release tag:
+
+`v2026.08.17-intel-macos`
 
 Base upstream release:
 
