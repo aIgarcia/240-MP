@@ -33,7 +33,7 @@ Branch:
 
 Current release:
 
-`v2026.08.17-monterey-intel.3`
+`v2026.08.17-intel-macos`
 
 Base:
 
@@ -68,7 +68,7 @@ required by 240-MP itself.
 
 mpv is external.
 
-The validated Monterey .3 release used:
+The validated Monterey build used:
 
 `mpv 0.39.0`
 
@@ -79,7 +79,7 @@ yt-dlp is also external and is required for YouTube functionality.
 
 ### Monterey validation
 
-The final Monterey .3 application was tested on Intel macOS Monterey.
+The final Monterey application was tested on Intel macOS Monterey.
 
 The validation included:
 
@@ -96,7 +96,7 @@ The fallback test was performed with `/usr/local/bin/mpv` temporarily
 disabled. Playback continued successfully using the standalone
 `/Applications/mpv.app` installation.
 
-Validated Monterey .3 executable SHA-256:
+Validated Monterey executable SHA-256:
 
 `6f02b201a5e79e36807d094682e2dfa3507f8f9393b1b295a5c7198f90e2ef31`
 
@@ -153,7 +153,7 @@ Branch:
 
 Current release:
 
-`v2026.08.17-catalina-intel.1`
+`v2026.08.17-intel-macos`
 
 Base:
 
