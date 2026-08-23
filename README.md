@@ -133,7 +133,7 @@ Starting from a clean clone:
     git clone https://github.com/aIgarcia/240-MP.git
     cd 240-MP
     git checkout monterey-intel
-    ./package-monterey-release.sh v2026.08.17-monterey-intel.3
+    ./package-monterey-release.sh v2026.08.17-intel-macos
 
 The completed application is written to:
 
@@ -192,7 +192,7 @@ Catalina toolchain available:
     git clone https://github.com/aIgarcia/240-MP.git
     cd 240-MP
     git checkout catalina-intel
-    ./package-catalina-release.sh v2026.08.17-catalina-intel.1
+    ./package-catalina-release.sh v2026.08.17-intel-macos
 
 The packaging workflow builds the application, deploys Qt, downloads the
 pinned mpv 0.35.0 archive, verifies its SHA-256, embeds the mpv runtime,
