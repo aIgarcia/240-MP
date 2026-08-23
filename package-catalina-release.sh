@@ -16,15 +16,72 @@ APP="$STAGE/240mp.app"
 
 MACDEPLOYQT="$QTROOT/bin/macdeployqt"
 
-MPV_SOURCE="/Volumes/Catalina/Applications/mpv.app.disabled/Contents/MacOS"
-if [ ! -x "$MPV_SOURCE/mpv" ]; then
-    MPV_SOURCE="/Volumes/Catalina/Applications/mpv.app/Contents/MacOS"
-fi
+MPV_VERSION="0.35.0"
+MPV_URL="https://laboratory.stolendata.net/~djinn/mpv_osx/mpv-0.35.0.tar.gz"
+MPV_SHA256="376415c787aef391a3927cdecd5bb0dac9f21ef9d7742516b8cd8d8ce502e7b6"
 
-if [ ! -x "$MPV_SOURCE/mpv" ]; then
-    echo "ERROR: Catalina mpv 0.35 source not found."
-    exit 1
-fi
+MPV_CACHE="$HOME/Library/Caches/240-MP/catalina-mpv"
+MPV_ARCHIVE="$MPV_CACHE/mpv-$MPV_VERSION.tar.gz"
+MPV_EXTRACT="$MPV_CACHE/mpv-$MPV_VERSION"
+
+prepare_mpv() {
+    mkdir -p "$MPV_CACHE"
+
+    if [ -f "$MPV_ARCHIVE" ]; then
+        ACTUAL="$(shasum -a 256 "$MPV_ARCHIVE" | awk '{print $1}')"
+
+        if [ "$ACTUAL" != "$MPV_SHA256" ]; then
+            echo "Cached mpv archive has wrong checksum; removing it."
+            rm -f "$MPV_ARCHIVE"
+        fi
+    fi
+
+    if [ ! -f "$MPV_ARCHIVE" ]; then
+        echo "Downloading mpv $MPV_VERSION from Stolendata..."
+        rm -f "$MPV_ARCHIVE.tmp"
+
+        curl -fL           --retry 3           --connect-timeout 20           "$MPV_URL"           -o "$MPV_ARCHIVE.tmp"
+
+        mv "$MPV_ARCHIVE.tmp" "$MPV_ARCHIVE"
+    fi
+
+    ACTUAL="$(shasum -a 256 "$MPV_ARCHIVE" | awk '{print $1}')"
+
+    if [ "$ACTUAL" != "$MPV_SHA256" ]; then
+        echo "ERROR: mpv archive checksum mismatch."
+        echo "Expected: $MPV_SHA256"
+        echo "Actual:   $ACTUAL"
+        exit 1
+    fi
+
+    echo "mpv archive SHA-256: OK"
+
+    rm -rf "$MPV_EXTRACT"
+    mkdir -p "$MPV_EXTRACT"
+
+    tar -xzf "$MPV_ARCHIVE" -C "$MPV_EXTRACT"
+
+    MPV_APP="$(find "$MPV_EXTRACT" -type d -name 'mpv.app' -print -quit)"
+
+    if [ -z "$MPV_APP" ]; then
+        echo "ERROR: mpv.app not found inside archive."
+        exit 1
+    fi
+
+    MPV_SOURCE="$MPV_APP/Contents/MacOS"
+
+    if [ ! -x "$MPV_SOURCE/mpv" ] || [ ! -d "$MPV_SOURCE/lib" ]; then
+        echo "ERROR: incomplete mpv runtime in archive."
+        exit 1
+    fi
+
+    echo "mpv runtime source:"
+    echo "$MPV_APP"
+}
+
+echo
+echo "===== MPV 0.35 SOURCE ====="
+prepare_mpv
 
 echo "===== CLEAN ====="
 rm -rf "$BUILD" "$STAGE"
@@ -85,6 +142,15 @@ ditto "$MPV_SOURCE/lib" "$APP/Contents/MacOS/lib"
 chmod +x "$APP/Contents/MacOS/mpv"
 
 echo
+echo "===== THIRD-PARTY NOTICES ====="
+
+mkdir -p "$APP/Contents/Resources/licenses/mpv-0.35.0"
+
+ditto   "$ROOT/third_party/mpv-0.35.0"   "$APP/Contents/Resources/licenses/mpv-0.35.0"
+
+cp   "$ROOT/THIRD_PARTY_NOTICES.md"   "$APP/Contents/Resources/THIRD_PARTY_NOTICES.md"
+
+echo
 echo "===== VALIDATE REQUIRED FILES ====="
 
 required=(
@@ -96,6 +162,11 @@ required=(
   "$APP/Contents/PlugIns/platforms/libqcocoa.dylib"
   "$APP/Contents/Resources/qt.conf"
   "$APP/Contents/Resources/Main.qml"
+  "$APP/Contents/Resources/THIRD_PARTY_NOTICES.md"
+  "$APP/Contents/Resources/licenses/mpv-0.35.0/SOURCE.txt"
+  "$APP/Contents/Resources/licenses/mpv-0.35.0/Copyright"
+  "$APP/Contents/Resources/licenses/mpv-0.35.0/LICENSE.GPL"
+  "$APP/Contents/Resources/licenses/mpv-0.35.0/LICENSE.LGPL"
 )
 
 for f in "${required[@]}"; do

@@ -1,0 +1,25 @@
+mpv 0.35.0 — macOS x86_64 binary distribution
+
+mpv project:
+https://mpv.io/
+https://github.com/mpv-player/mpv
+
+macOS binary build:
+https://laboratory.stolendata.net/~djinn/mpv_osx/
+
+The official mpv installation page lists the Stolendata macOS builds:
+https://mpv.io/installation/
+
+Archive:
+https://laboratory.stolendata.net/~djinn/mpv_osx/mpv-0.35.0.tar.gz
+
+Archive SHA-256:
+376415c787aef391a3927cdecd5bb0dac9f21ef9d7742516b8cd8d8ce502e7b6
+
+The Catalina Intel build of 240-MP copies the mpv executable and its
+bundled runtime libraries from this archive into the application bundle.
+
+The mpv files themselves are not modified by this project.
+
+See Copyright, LICENSE.GPL and LICENSE.LGPL in this directory for the
+upstream mpv 0.35.0 licensing information.
