@@ -4,7 +4,14 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")" && pwd)"
 cd "$ROOT"
 
-VERSION="${1:-v2026.08.17-catalina-intel.1}"
+VERSION="${1:-v2026.08.17-intel-macos}"
+BUNDLE_VERSION="$(printf '%s\n' "$VERSION" | sed -E 's/^v([0-9]+\.[0-9]+\.[0-9]+).*$/\1/')"
+
+if [ "$BUNDLE_VERSION" = "$VERSION" ]; then
+    echo "ERROR: unable to derive numeric bundle version from:"
+    echo "$VERSION"
+    exit 1
+fi
 
 QTROOT="$HOME/Qt/kits/6.4.2-macos"
 OPENSSL="$ROOT/deps-catalina/prefix/openssl"
@@ -129,6 +136,15 @@ Plugins = PlugIns
 Imports = Resources/qml
 QmlImports = Resources/qml
 QTEOF
+
+echo
+echo "===== BUNDLE VERSION ====="
+
+/usr/bin/plutil -replace CFBundleShortVersionString -string "$BUNDLE_VERSION" "$APP/Contents/Info.plist"
+/usr/bin/plutil -replace CFBundleVersion -string "$BUNDLE_VERSION" "$APP/Contents/Info.plist"
+
+/usr/bin/plutil -p "$APP/Contents/Info.plist" |
+grep -E 'CFBundleShortVersionString|CFBundleVersion'
 
 echo
 echo "===== EMBED MPV 0.35 ====="
