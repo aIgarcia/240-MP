@@ -16,3 +16,17 @@ Thumbs.db
 /.appimage-tools
 /.mpv-build
 /*.AppImage
+
+# Catalina local build and packaging artifacts
+/240-MP-Catalina-Intel.app/
+/build-catalina-new/
+/build-catalina-release/
+/build-package-catalina-auto/
+/build-package-catalina/
+/dist-catalina-release/
+/package-catalina-auto/
+/package-catalina/
+/stage-catalina/
+/qml/
+/qt.conf
+*.before-*
